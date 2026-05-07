@@ -69,7 +69,7 @@ Registration is typically instant but can take up to a few minutes. Wait for all
 
 ## Run the Deployment
 
-Choose one of the two deployment options below. **Option A (GitHub Actions) is recommended** for the full workshop experience, as the push trigger enables the Module 5 fault injection scenario. Option B is useful for local testing and development.
+Choose one of the two deployment options below. **Option A (GitHub Actions) is recommended** for the full workshop experience. Option B is useful for local testing and development.
 
 ### Option A: GitHub Actions (Recommended)
 
@@ -239,7 +239,7 @@ echo "Save this for Module 2: $UAMI_CLIENT_ID"
 ```
 
 **Note on GitHub Actions vs. Local Deployment:**  
-The GitHub Actions workflow includes a push trigger on `infra/**` changes. This is essential for **Module 5** (Break It), where you'll remove a Bicep role assignment and push to main. The workflow automatically re-deploys the broken infrastructure, triggering the fault scenario. If deploying locally, you can still complete Module 5 by re-running the deployment commands after making the Bicep change, or by using GitHub Actions for that module only.
+The `Deploy Infrastructure` workflow is triggered manually via `workflow_dispatch`. After making Bicep changes (like in Module 5), you push your code and then manually trigger the deployment — this ensures you always deploy with the correct region and workload name. A separate `Validate Infrastructure` workflow runs automatically on push and PRs to check Bicep syntax and show a what-if preview. If deploying locally, you can still complete Module 5 by re-running the deployment commands after making the Bicep change.
 
 ## Verify Resources in Azure
 

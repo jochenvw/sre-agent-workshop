@@ -1,8 +1,6 @@
 # Deploys Bicep infrastructure (AKS, CosmosDB, monitoring, identity) to Azure.
-# Triggers on manual dispatch or when infra files change on main.
-# IMPORTANT: The push trigger on infra/** is critical for the workshop —
-# when attendees remove the role assignment in Module 5 and push to main,
-# this workflow auto-deploys the broken Bicep, triggering the fault scenario.
+# Manual dispatch only — participants choose their region and workload name explicitly.
+# Push-based validation (syntax check + what-if) is handled by validate-infra.yml.
 name: Deploy Infrastructure
 
 on:
@@ -20,9 +18,6 @@ on:
         description: 'Workload name (used in resource naming)'
         type: string
         default: srelab
-  push:
-    branches: [main]
-    paths: ['infra/**']
 
 permissions:
   id-token: write

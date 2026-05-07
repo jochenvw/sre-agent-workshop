@@ -1,5 +1,6 @@
 # Deploys the workshop web application to AKS.
 # Substitutes Azure resource values into K8s manifests and applies them.
+# Manual dispatch only — ensures the workload name matches your actual deployment.
 name: Deploy Application
 
 on:
@@ -9,9 +10,6 @@ on:
         description: 'Workload name (must match the infra deployment)'
         type: string
         default: srelab
-  push:
-    branches: [main]
-    paths: ['k8s/**']
 
 permissions:
   id-token: write

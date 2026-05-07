@@ -156,9 +156,9 @@ Your fork needs the service principal credentials as a GitHub Actions secret. An
 
 > **Security note:** GitHub encrypts these secrets in transit and at rest. They're only exposed to workflows running in your repository and cannot be read back via the GitHub UI.
 
-## Step 4: Configure Repository Variables (Required for Push-Triggered Workflows)
+## Step 4: Configure Repository Variables (Optional)
 
-When workflows trigger automatically on `push` (e.g., the fault injection scenario in Module 5), they cannot read manual `workflow_dispatch` inputs. Repository variables ensure all workflows use the correct workload name and location, regardless of how they're triggered.
+Repository variables provide default values for your workflows and the validation what-if preview. While deploy workflows always let you pick the region and workload name explicitly, setting these variables means the `Validate Infrastructure` workflow (which runs on push and PRs) can show an accurate what-if preview against your actual environment.
 
 **Steps:**
 
@@ -169,10 +169,10 @@ When workflows trigger automatically on `push` (e.g., the fault injection scenar
 
 | Variable Name | Value | Description |
 |---------------|-------|-------------|
-| `WORKLOAD_NAME` | Your chosen workload name (e.g., `srelab`) | Used in all resource naming — must match what you used in Module 1 |
-| `AZURE_LOCATION` | Your chosen Azure region (e.g., `eastus2`) | Must match the region used in Module 1 |
+| `WORKLOAD_NAME` | Your chosen workload name (e.g., `srelab`) | Used in resource naming — should match what you used in Module 1 |
+| `AZURE_LOCATION` | Your chosen Azure region (e.g., `eastus2`) | Should match the region used in Module 1 |
 
-> **Why this matters:** Without these variables, push-triggered workflows fall back to the default `srelab` / `eastus2`. If you customized your workload name during the infrastructure deployment, the app deployment and Module 5 fault injection will target the wrong resource group and fail.
+> **Why this matters:** The `Validate Infrastructure` workflow runs automatically when you push Bicep changes or open a PR. It validates Bicep syntax and shows a what-if preview of what the deployment would change. Without these variables, the what-if preview targets the default `srelab` / `eastus2`, which may not match your actual deployment.
 
 ## Step 5: Verify Your Setup
 

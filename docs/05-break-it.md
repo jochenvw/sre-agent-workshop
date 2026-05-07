@@ -6,7 +6,7 @@ Time to introduce a realistic infrastructure fault. You'll remove a critical rol
 
 ## The Scenario
 
-> _A team member is reviewing the Bicep code during a cleanup initiative. They spot a role assignment on the CosmosDB account that they think might be leftover from an old project. No one is sure if it's needed, so they remove it, commit the change, and submit a PR. The code review looks good — the Bicep is syntactically valid. The PR gets merged. The `deploy-infra` workflow triggers automatically. The infrastructure update completes successfully._
+> _A team member is reviewing the Bicep code during a cleanup initiative. They spot a role assignment on the CosmosDB account that they think might be leftover from an old project. No one is sure if it's needed, so they remove it, commit the change, and submit a PR. The code review looks good — the Bicep is syntactically valid. The PR gets merged. The team deploys the updated infrastructure. The deployment completes successfully._
 >
 > _Everything looks fine. The pods are running, health checks pass. But users start complaining that items aren't loading. The app is broken, and it happened silently._
 
@@ -64,11 +64,12 @@ git commit -m "cleanup: remove unused CosmosDB role assignment"
 git push origin main
 ```
 
-The `deploy-infra.yml` workflow will trigger automatically (it watches for changes to files in the `infra/**` path).
+When you push, the `Validate Infrastructure` workflow runs automatically — it checks Bicep syntax and shows a what-if preview of the changes. But it doesn't deploy anything. To actually deploy the broken infrastructure:
 
 1. **Go to GitHub** → your fork → **Actions** tab
-2. **Select the workflow run** for "Deploy Infra" that just started
-3. **Watch it complete** (~3–5 minutes)
+2. **Select "Deploy Infrastructure"** in the left sidebar
+3. **Click "Run workflow"** → choose your region and workload name → **Run workflow**
+4. **Watch it complete** (~3–5 minutes)
 
 The deployment will **succeed**. The Bicep template is valid syntactically. No errors. No warnings. Just a silent infrastructure change.
 
@@ -164,7 +165,7 @@ Your Azure Monitor alert will detect the spike in failed requests. The SRE Agent
 5. **Read the Bicep code** to understand what changed
 6. **Identify the root cause:** missing role assignment
 7. **Propose a fix** and open a PR on your fork
-8. **If you configured it for Autonomous mode,** the agent will merge the PR and trigger a new deployment
+8. **If you configured it for Autonomous mode,** the agent will merge the PR — you then trigger the `Deploy Infrastructure` workflow to apply the fix
 
 You don't need to fix this yourself. **Don't troubleshoot.** Don't manually restore the role assignment. Let the SRE Agent do its job. Head to Module 6 to watch it work.
 
