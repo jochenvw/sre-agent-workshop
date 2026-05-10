@@ -280,12 +280,12 @@ Click on the **"Files changed"** tab:
 2. Confirm the merge
 3. Optionally delete the branch after merging
 
-### Step 2: Watch the deployment
+### Step 2: Deploy the fix
 1. Go to your repository's **Actions** tab
-2. Look for `deploy-infra.yml` workflow running
-   - GitHub Actions automatically triggered when you merged
-   - This workflow deploys the Bicep changes to Azure
-3. Wait for the workflow to complete (~3–5 minutes)
+2. Select **"Deploy Infrastructure"** in the left sidebar
+3. Click **"Run workflow"** → choose your region and workload name → **Run workflow**
+   - This deploys the Bicep changes (with the restored role assignment) to Azure
+4. Wait for the workflow to complete (~3–5 minutes)
    - You should see a ✅ green checkmark when done
 
 ### Step 3: Verify the app is working again
@@ -406,7 +406,8 @@ Module 5 — 14:32:15
   └─ Push to main
 
 Module 5 — 14:32:47
-  └─ GitHub Actions: deploy-infra.yml triggered
+  └─ Validate Infrastructure workflow runs (syntax + what-if)
+  └─ You: Manually trigger Deploy Infrastructure workflow
   └─ Bicep deploys infrastructure WITHOUT role assignment
   └─ CosmosDB still exists, but managed identity has no permission
 
@@ -447,7 +448,7 @@ Module 6 — 14:39:15 (Your Action)
   └─ You: Confirm merge
 
 Module 6 — 14:39:22 (Redeployment)
-  └─ GitHub Actions: deploy-infra.yml triggered (post-merge)
+  └─ You: Manually trigger Deploy Infrastructure workflow
   └─ Bicep deploys infrastructure WITH role assignment restored
   └─ CosmosDB role assignment is recreated
   └─ Managed identity regains permission
@@ -482,7 +483,7 @@ What you just experienced is the **full incident lifecycle**, compressed into 10
 | **Diagnosis** | Synthesize findings into incident post-mortem (next day) | Synthesized during incident response (minutes) |
 | **Fix proposal** | Senior engineer codes a fix during incident (error-prone) | Automated code fix based on diagnosis |
 | **Code review** | Peer review process (standard PR flow) | You review SRE Agent PR |
-| **Deployment** | CI/CD runs automatically post-merge | CI/CD runs automatically post-merge |
+| **Deployment** | CI/CD runs automatically post-merge | You trigger Deploy Infrastructure after merging |
 | **Verification** | Manual spot-checking, "Is it fixed?" | Automated health check validation |
 | **Incident closure** | Manual investigation report written next day | Incident marked resolved with full analysis attached |
 | **MTTR** | 30–60+ minutes | 5–10 minutes |
